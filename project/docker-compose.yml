@@ -14,6 +14,17 @@ services:
     networks:
       - mynetwork
 
+  logger-service:
+    build:
+      context: ./../logger-service
+      dockerfile: ./../logger-service/logger-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    networks:
+      - mynetwork
+
   authentication:
     build:
       context: ./../authentication-service
@@ -41,6 +52,17 @@ services:
       replicas: 1
     volumes:
       - ./db-data/postgres/:/private/var/lib/postgresql/data/
+    networks:
+      - mynetwork
+
+  mongodb:
+    build:
+      context: ./../mongodb
+      dockerfile: ./../mongodb/mongodb.dockerfile
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db-data/mongo/:/private/data/db
     networks:
       - mynetwork
 
