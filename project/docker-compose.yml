@@ -94,5 +94,27 @@ services:
     networks:
       - mynetwork
 
+  rabbitmq:
+    image: rabbitmq:3.9-alpine
+    ports:
+      - "5672:5672"
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - ./db-data/rabbitmq:/private/var/lib/rabbitmq
+    networks:
+      - mynetwork
+
+  listener-service:
+    build:
+      context: ./../listener-service
+      dockerfile: ./../listener-service/listener-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:
